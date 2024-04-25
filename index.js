@@ -18,7 +18,7 @@ for(var i=0;i<button.length;i++){
                    var expression=document.querySelector("#display").innerHTML;
                    var postFix=convertToPostfix(expression);
                    var result=solve(postFix);
-                   document.querySelector("#display").innerHTML= result.toString();
+                   document.querySelector("#display").innerHTML= formatResult(result);
             }
         }
     })
@@ -28,8 +28,12 @@ function writeDisplay(num){
     
     
     var str= document.querySelector("#display").innerHTML;
-    
-    document.querySelector("#display").innerHTML= str + num;
+    var newStr= str + num;
+    if(newStr.length<=16)
+        document.querySelector("#display").innerHTML= newStr;
+    else{
+        document.querySelector("#display").innerHTML= newStr.slice(0,16);
+    }
 
 }
 
@@ -126,4 +130,16 @@ function solve(postfixExpression) {
     }
 
     return stack.pop();
+}
+function formatResult(result) {
+    // Check if result is too large to be displayed
+    var display = document.querySelector("#display");
+    var displayWidth = display.offsetWidth;
+    var resultString = result.toString();
+
+    if (resultString.length > displayWidth / 10) { // Adjust this threshold as needed
+        return result.toExponential(2); // Display result in exponential form with 2 decimal places
+    } else {
+        return resultString; // Display result as is
+    }
 }
